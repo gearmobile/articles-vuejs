@@ -77,3 +77,61 @@ export default {
 }
 </script>
 ```
+
+В этом компоненте пункты меню хранятся с массиве *listItems* и являются данными компонента *List.vue*. Эти данные доступны в шаблоне, где они обрабатываютсяв цикле (директива *v-for*) и отображаются на странице.
+
+Чтобы увидеть этот список в браузере, нужно создать новые маршрут в роутере. Для этго в файле *src/router/index.js* добавляем новый маршрут таким образом:
+
+```js
+import Vue from 'vue'
+import Router from 'vue-router'
+import Hello from '@/components/Hello'
+import List from '@/components/List'
+
+Vue.use(Router)
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'Hello',
+      component: Hello
+    },
+    {
+      path: '/to-do',
+      name: 'ToDo',
+      component: List
+    },
+  ]
+})
+```
+
+В этом файле первоначально подключается новый компонент строкой *import List from '@/components/List'*, затем создается новый маршрут со свойтсвом *path: '/to-do'*.
+
+Тпереь если в адресной строке браузера указать путь *localhost:8080/#/to-do*, то в окне браузера отобразится такая страница:
+
+![./images/vue-test-page-01.png]
+
+Нашей задачей является проверка того, правильно ли отображаются данные на странице. Для этого в директории *test/unit/specs* создадим новый файл *List.spec.js* и поместим в него следующий код:
+
+```js
+import List from '@/components/List';
+import Vue from 'vue';
+
+describe('List.vue', () => {
+
+  it('displays items from the list', () => {
+      // our test goes here
+  })
+})
+```
+
+В этом примере мы описываем (*describe*) компонент *List.vue*. Здесь мы создаем простой тест, который проверяет, отображает ли компонент пункты меню из списка. Этот файл является примером базовой структуры для тестов под Mocha.
+
+Внутри теста нужно определить Vue-компонент, который будет тестироваться. Для этого добавим его двумя строчка внутрь теста:
+
+```js
+// build component
+const Constructor = Vue.extend(List);
+const ListComponent = new Constructor().$mount();
+```
